@@ -5,6 +5,12 @@ All notable changes to **GuildMute** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.1] - 2026-04-26
+
+### Added
+- `X-Curse-Project-ID: 1526012` in the TOC. Tagged releases now upload
+  to CurseForge in addition to creating a GitHub release.
+
 ## [0.4.0] - 2026-04-26
 
 First public release.
@@ -63,6 +69,7 @@ First public release.
 - Slash commands `/guildmute`, `/gm`: `guild`, `refresh`, `add`, `remove`,
   `list`, `clear`, `toggle`, `status`.
 
+[0.4.1]: https://github.com/stroexd/GuildMute/releases/tag/v0.4.1
 [0.4.0]: https://github.com/stroexd/GuildMute/releases/tag/v0.4.0
 [0.3.0]: https://github.com/stroexd/GuildMute/releases/tag/v0.3.0
 [0.2.0]: https://github.com/stroexd/GuildMute/releases/tag/v0.2.0
