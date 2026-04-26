@@ -30,6 +30,10 @@ Multiboxing or playing alts on the same realm? Use export/import to copy the lis
 /gm interval <min>    auto-scan every N minutes (0 = off; default: 30)
 /gm export            open a window with the list, ready to copy
 /gm import            paste a list to merge into this character
+/gm history [N]       show the last N filtered messages (default 20)
+/gm history all       open a window with everything filtered this session
+/gm history clear     wipe the in-memory buffer
+/gm history on|off    enable/disable recording (in-memory only; never saved)
 /gm add <Charname>    add a name manually
 /gm remove <Charname> remove a name
 /gm list              show all muted names on this realm

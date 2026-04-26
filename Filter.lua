@@ -30,6 +30,11 @@ function Filter:OnMessage(chatFrame, event, msg, sender)
     return false
   end
   if ns.Roster:Has(sender) then
+    -- ChatFrame_AddMessageEventFilter calls this once per chat frame; only record
+    -- on the first frame's pass so duplicates don't pile up in the history.
+    if chatFrame == DEFAULT_CHAT_FRAME then
+      ns.History:Record(event, sender, msg)
+    end
     return true -- suppress the message in this chat frame
   end
   return false

@@ -116,6 +116,22 @@ function IO:ShowExport()
   f:Show()
 end
 
+-- Read-only viewer for arbitrary text (used by /gm history all).
+function IO:ShowText(title, hint, text)
+  local f = ensureFrame()
+  f.title:SetText(title or "GuildMute")
+  f.hint:SetText(hint or "")
+  f.edit:SetText(text or "")
+  f.edit:HighlightText(0, 0)
+  f.edit:SetCursorPosition(0)
+  f.edit:SetFocus()
+  f.action:SetText("Close")
+  f.action:SetScript("OnClick", function()
+    f:Hide()
+  end)
+  f:Show()
+end
+
 function IO:ShowImport()
   local f = ensureFrame()
   f.title:SetText("GuildMute — Import")
