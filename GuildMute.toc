@@ -7,6 +7,8 @@
 ## SavedVariables: GuildMuteDB
 ## X-Flavor: TBC
 ## X-Category: Chat & Communication
+## X-License: MIT
+## X-Website: https://github.com/stroexd/GuildMute
 
 embeds.xml
 
