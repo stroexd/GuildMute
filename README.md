@@ -41,10 +41,10 @@ On first login, set the target guild:
 /gm guild <GuildName>
 ```
 
-For example, to silence the guild *Dawnwalkers*:
+For example, to silence the guild *test*:
 
 ```
-/gm guild Dawnwalkers
+/gm guild test
 ```
 
 Until you set this, GuildMute idles silently and filters nothing.
