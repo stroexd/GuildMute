@@ -15,9 +15,12 @@ globals = {
 
 read_globals = {
   "UnitExists", "UnitIsPlayer", "UnitName", "GetGuildInfo",
-  "GetTime", "time", "wipe",
+  "GetTime", "time", "wipe", "tonumber",
   "C_Timer", "C_FriendList",
   "SendWho", "GetNumWhoResults", "GetWhoInfo",
   "ChatFrame_AddMessageEventFilter",
   "DEFAULT_CHAT_FRAME",
+
+  -- UI for export/import frame
+  "CreateFrame", "UIParent", "ChatFontNormal",
 }
