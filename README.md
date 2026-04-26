@@ -1,8 +1,14 @@
 # GuildMute
 
-Personal TBC Classic Anniversary addon (Interface 20505).
+TBC Classic Anniversary addon (Interface 20505).
 
-Hides whispers, party, and raid chat from members of a configured guild. Default target guild is `Dawnwalkers`.
+Hides whispers, party, and raid chat from members of a guild you choose. On first start, set the target guild with:
+
+```
+/gm guild <GuildName>
+```
+
+There is no default target — nothing is filtered until you set one.
 
 ## How it builds the mute list
 
@@ -25,7 +31,7 @@ Multiboxing or playing alts on the same realm? Use export/import to copy the lis
 ## Slash commands
 
 ```
-/gm guild <Name>      set the target guild (default: Dawnwalkers)
+/gm guild <Name>      set the target guild (required, no default)
 /gm refresh           run a /who scan now
 /gm interval <min>    auto-scan every N minutes (0 = off; default: 30)
 /gm export            open a window with the list, ready to copy

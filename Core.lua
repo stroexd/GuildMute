@@ -3,11 +3,9 @@ local ADDON_NAME, ns = ...
 local GuildMute = LibStub("AceAddon-3.0"):NewAddon(ADDON_NAME, "AceEvent-3.0", "AceConsole-3.0")
 ns.Addon = GuildMute
 
-local DEFAULT_GUILD = "Dawnwalkers"
-
 local defaults = {
   realm = {
-    targetGuild = DEFAULT_GUILD,
+    targetGuild = nil, -- must be set by the user via /gm guild <Name>
     enabled = true,
     scanIntervalMin = 30, -- 0 disables periodic /who scans
     historyEnabled = true, -- in-memory only; cleared on /reload
@@ -32,16 +30,19 @@ function GuildMute:OnEnable()
   for _ in pairs(self.db.realm.muted) do
     count = count + 1
   end
-  self:Print(
-    ("ready. %d muted on this realm. Target guild: %s. /gm help for commands."):format(count, self.db.realm.targetGuild)
-  )
+  local guild = self.db.realm.targetGuild
+  if not guild or guild == "" then
+    self:Print("ready. No target guild set yet. Use: /gm guild <GuildName>")
+  else
+    self:Print(("ready. %d muted on this realm. Target guild: %s. /gm help for commands."):format(count, guild))
+  end
   -- Start the auto-scan ticker; the PLAYER_ENTERING_WORLD handler also restarts it on /reload.
   ns.Roster:StartAutoScan()
 end
 
 local function help(self)
   self:Print("commands:")
-  self:Print("  /gm guild <Name>      set guild to filter (default: Dawnwalkers)")
+  self:Print("  /gm guild <Name>      set the guild whose chatter to hide (required)")
   self:Print("  /gm refresh           run a /who scan now to populate the list")
   self:Print("  /gm interval <min>    set auto-scan interval (0 = off; default: 30)")
   self:Print("  /gm export            open a window with the list, ready to copy")
@@ -62,11 +63,12 @@ function GuildMute:HandleSlashCommand(input)
 
   if cmd == "guild" then
     if rest == "" then
-      self:Print("target guild: " .. self.db.realm.targetGuild)
+      self:Print("target guild: " .. (self.db.realm.targetGuild or "<not set>"))
       return
     end
     self.db.realm.targetGuild = rest
     self:Print("target guild set: " .. rest)
+    ns.Roster:StartAutoScan()
   elseif cmd == "refresh" or cmd == "scan" then
     ns.Roster:RequestWhoScan()
   elseif cmd == "interval" then
@@ -149,7 +151,7 @@ function GuildMute:HandleSlashCommand(input)
     end
     self:Print(
       ("guild=%s | muted=%d | filter=%s | autoscan=%s"):format(
-        self.db.realm.targetGuild,
+        self.db.realm.targetGuild or "<not set>",
         count,
         self.db.realm.enabled and "ON" or "OFF",
         self.db.realm.scanIntervalMin > 0 and (self.db.realm.scanIntervalMin .. "min") or "off"

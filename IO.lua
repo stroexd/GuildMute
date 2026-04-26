@@ -152,7 +152,11 @@ function IO:ShowImport()
       end
     end
     self.addon:Print(
-      ("import: +%d new (%d in payload). Guild: %s"):format(added, #names, self.addon.db.realm.targetGuild)
+      ("import: +%d new (%d in payload). Guild: %s"):format(
+        added,
+        #names,
+        self.addon.db.realm.targetGuild or "<not set>"
+      )
     )
     f:Hide()
   end)
