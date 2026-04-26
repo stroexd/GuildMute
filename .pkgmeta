@@ -13,5 +13,8 @@ ignore:
   - stylua.toml
   - .styluaignore
   - dev-link.sh
+  - CURSEFORGE.md
+  - Media/icon.svg
+  - Media/build-icons.sh
 
 enable-nolib-creation: no
