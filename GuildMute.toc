@@ -9,6 +9,7 @@
 ## X-Category: Chat & Communication
 ## X-License: MIT
 ## X-Website: https://github.com/stroexd/GuildMute
+## X-Curse-Project-ID: 1526012
 
 embeds.xml
 
