@@ -19,9 +19,7 @@ Roster.Normalize = normalize
 function Roster:Initialize(addon)
   self.addon = addon
   self.pendingScan = false
-  self.scanIsSilent = false
   self.lastScanAt = 0
-  self.autoTicker = nil
 
   addon:RegisterEvent("UPDATE_MOUSEOVER_UNIT", function()
     self:LearnFromUnit("mouseover")
@@ -31,30 +29,6 @@ function Roster:Initialize(addon)
   end)
   addon:RegisterEvent("WHO_LIST_UPDATE", function()
     self:OnWhoListUpdate()
-  end)
-  addon:RegisterEvent("PLAYER_ENTERING_WORLD", function(_, isInitialLogin, isReloadingUi)
-    if isInitialLogin or isReloadingUi then
-      self:StartAutoScan()
-    end
-  end)
-end
-
--- Cancels any pending ticker and reschedules according to db.realm.scanIntervalMin.
--- Also fires one scan ~5s from now so a fresh login/reload populates promptly.
-function Roster:StartAutoScan()
-  if self.autoTicker then
-    self.autoTicker:Cancel()
-    self.autoTicker = nil
-  end
-  local mins = self.addon.db.realm.scanIntervalMin or 0
-  if mins <= 0 then
-    return
-  end
-  C_Timer.After(5, function()
-    self:RequestWhoScan(true)
-  end)
-  self.autoTicker = C_Timer.NewTicker(mins * 60, function()
-    self:RequestWhoScan(true)
   end)
 end
 
@@ -138,29 +112,26 @@ function Roster:PrintList()
   end
 end
 
+-- NOTE: SendWho()/C_FriendList.SendWho() is a protected function. It only works
+-- when called from a hardware event (keypress/click), e.g. the user typing
+-- "/gm scan". It cannot be driven automatically from a timer, so there is no
+-- periodic auto-scan -- the roster fills passively (mouseover/target) plus manual scans.
 local SCAN_COOLDOWN = 6 -- /who is rate-limited; ~5s server-side
-function Roster:RequestWhoScan(silent)
+function Roster:RequestWhoScan()
   local guild = self.addon.db.realm.targetGuild
   if not guild or guild == "" then
-    if not silent then
-      self.addon:Print("no target guild set; use /gm guild <Name>")
-    end
+    self.addon:Print("no target guild set; use /gm guild <Name>")
     return
   end
   local now = GetTime()
   local wait = SCAN_COOLDOWN - (now - self.lastScanAt)
   if wait > 0 then
-    if not silent then
-      self.addon:Print(("/who is rate-limited, retry in %ds"):format(math.ceil(wait)))
-    end
+    self.addon:Print(("/who is rate-limited, retry in %ds"):format(math.ceil(wait)))
     return
   end
   self.lastScanAt = now
   self.pendingScan = true
-  self.scanIsSilent = silent and true or false
-  if not silent then
-    self.addon:Print(('scanning /who g-"%s" ...'):format(guild))
-  end
+  self.addon:Print(('scanning /who g-"%s" ...'):format(guild))
   local query = 'g-"' .. guild .. '"'
   if C_FriendList and C_FriendList.SendWho then
     C_FriendList.SendWho(query)
@@ -193,8 +164,6 @@ function Roster:OnWhoListUpdate()
     return
   end
   self.pendingScan = false
-  local silent = self.scanIsSilent
-  self.scanIsSilent = false
   local count = getNumWhoResults() or 0
   local target = (self.addon.db.realm.targetGuild or ""):lower()
   local added = 0
@@ -206,10 +175,8 @@ function Roster:OnWhoListUpdate()
       end
     end
   end
-  if not silent or added > 0 then
-    self.addon:Print(("scan: +%d new (%d /who results)"):format(added, count))
-  end
-  if count >= 49 and not silent then
+  self.addon:Print(("scan: +%d new (%d /who results)"):format(added, count))
+  if count >= 49 then
     self.addon:Print("note: /who returns at most 49 hits; large guilds may need multiple scans with level filters")
   end
 end

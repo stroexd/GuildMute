@@ -5,6 +5,19 @@ All notable changes to **GuildMute** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.0] - 2026-06-03
+
+### Fixed
+- Removed the periodic `/who` auto-scan. `SendWho()`/`C_FriendList.SendWho()` is
+  a protected function that only runs from a hardware event (keypress/click), so
+  the timer-driven scan was blocked on Anniversary realms with
+  `ADDON_ACTION_BLOCKED: GuildMute tried to call the protected function 'SendWho()'`.
+
+### Changed
+- The roster now fills passively (mouseover/target) plus manual `/gm scan`.
+- Removed the `/gm interval` command and the `scanIntervalMin` setting; `/gm status`
+  no longer shows an auto-scan field.
+
 ## [0.4.1] - 2026-04-26
 
 ### Added

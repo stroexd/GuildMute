@@ -10,7 +10,7 @@ Some guilds talk a lot. If you regularly group with members of a guild whose cha
 - **Party** / party leader → suppressed
 - **Raid** / raid leader / raid warning → suppressed
 - **Instance chat** (LFG dungeon) → suppressed
-- Guild membership is detected automatically via mouseover, target, and periodic `/who` scans
+- Guild membership is detected automatically via mouseover and target, plus on-demand `/who` scans
 
 Pure Lua addon — no external tools, no companion app, no setup beyond installing it and naming the guild.
 
@@ -52,8 +52,8 @@ Until you set this, GuildMute idles silently and filters nothing.
 The mute list then starts populating itself:
 
 - Every time you mouse over or target a player from the target guild, they're **silently added** in the background.
-- Every 30 minutes (and once a few seconds after login or `/reload`), GuildMute runs `/who g-"<Guild>"` and harvests the results.
-- You can trigger a scan on demand with `/gm refresh`, or add names manually with `/gm add <Charname>`.
+- Run `/gm scan` to fire a `/who g-"<Guild>"` and harvest the results. Blizzard protects `/who` so it can only be triggered by a real key press or click — that's why scans are manual, not automatic.
+- You can also add names manually with `/gm add <Charname>`.
 
 After a few raids or world sessions, the list typically covers most active members.
 
@@ -73,14 +73,13 @@ All commands also work with `/guildmute` as a long-form alias.
 | Command | What it does |
 |---|---|
 | `/gm guild <Name>` | Set the target guild (required) |
-| `/gm refresh` | Run a `/who` scan now |
-| `/gm interval <min>` | Auto-scan every N minutes (`0` = off; default: 30) |
+| `/gm scan` | Run a `/who` scan now (alias: `/gm refresh`) |
 | `/gm add <Charname>` | Add a name manually |
 | `/gm remove <Charname>` | Remove a name |
 | `/gm list` | Show all muted names on this realm |
 | `/gm clear` | Empty the mute list |
 | `/gm toggle` | Enable / disable filtering globally |
-| `/gm status` | Show summary (guild, count, filter, autoscan interval) |
+| `/gm status` | Show summary (guild, count, filter) |
 | `/gm export` | Open a window with the list, ready to copy |
 | `/gm import` | Paste a list to merge into this character |
 | `/gm history` | Show the last 20 filtered messages this session |
