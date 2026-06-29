@@ -5,6 +5,17 @@ All notable changes to **GuildMute** are documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.5.1] - 2026-06-29
+
+### Fixed
+- WIM compatibility: GuildMute's chat filter is now inserted at position 1 of
+  `ChatFrame_MessageEventFilters` so it runs before WIM's filter. WIM redirects
+  whispers to its popup windows via the same filter mechanism and stops the chain
+  with `return true`; if WIM registered first, GuildMute's filter never ran.
+- `/gm guild <Name>` now warns when the target guild is changed and the mute list
+  still holds entries from the previous guild, with hints for `/gm scan` (add new
+  members) or `/gm clear` (start fresh). Previously there was no feedback at all.
+
 ## [0.5.0] - 2026-06-03
 
 ### Fixed
@@ -82,6 +93,7 @@ First public release.
 - Slash commands `/guildmute`, `/gm`: `guild`, `refresh`, `add`, `remove`,
   `list`, `clear`, `toggle`, `status`.
 
+[0.5.1]: https://github.com/stroexd/GuildMute/releases/tag/v0.5.1
 [0.4.1]: https://github.com/stroexd/GuildMute/releases/tag/v0.4.1
 [0.4.0]: https://github.com/stroexd/GuildMute/releases/tag/v0.4.0
 [0.3.0]: https://github.com/stroexd/GuildMute/releases/tag/v0.3.0

@@ -3,7 +3,7 @@
 ## Notes: Hides whispers and party/raid chat from members of a configured guild.
 ## Notes-deDE: Blendet Whisper sowie Gruppen-/Schlachtzugschat von Mitgliedern einer konfigurierten Gilde aus.
 ## Author: Stroe-Spineshatter
-## Version: 0.5.0
+## Version: 0.5.1
 ## SavedVariables: GuildMuteDB
 ## X-Flavor: TBC
 ## X-Category: Chat & Communication
