@@ -62,8 +62,20 @@ function GuildMute:HandleSlashCommand(input)
       self:Print("target guild: " .. (self.db.realm.targetGuild or "<not set>"))
       return
     end
+    local prev = self.db.realm.targetGuild
     self.db.realm.targetGuild = rest
     self:Print("target guild set: " .. rest)
+    if prev and prev:lower() ~= rest:lower() then
+      local count = 0
+      for _ in pairs(self.db.realm.muted) do count = count + 1 end
+      if count > 0 then
+        self:Print(("mute list still has %d entries from previous guild (%s). /gm scan to add new members, /gm clear to start fresh."):format(count, prev))
+      else
+        self:Print("run /gm scan to populate the mute list.")
+      end
+    elseif not prev then
+      self:Print("run /gm scan to populate the mute list.")
+    end
   elseif cmd == "refresh" or cmd == "scan" then
     ns.Roster:RequestWhoScan()
   elseif cmd == "export" then

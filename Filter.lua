@@ -16,9 +16,23 @@ local FILTERED_EVENTS = {
 function Filter:Initialize(addon)
   self.addon = addon
   for _, ev in ipairs(FILTERED_EVENTS) do
-    ChatFrame_AddMessageEventFilter(ev, function(chatFrame, event, ...)
+    local filterFunc = function(chatFrame, event, ...)
       return self:OnMessage(chatFrame, event, ...)
-    end)
+    end
+    ChatFrame_AddMessageEventFilter(ev, filterFunc)
+    -- WIM and similar addons register their own filters early and redirect
+    -- whispers to popup windows before returning true. By moving our filter
+    -- to position 1 we suppress the message before WIM ever sees it.
+    local list = ChatFrame_MessageEventFilters and ChatFrame_MessageEventFilters[ev]
+    if list and #list > 1 then
+      for i = 2, #list do
+        if list[i] == filterFunc then
+          table.remove(list, i)
+          table.insert(list, 1, filterFunc)
+          break
+        end
+      end
+    end
   end
 end
 
